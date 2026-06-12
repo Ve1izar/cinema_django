@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Афіша</title>
+</head>
+
+<body>
+    <h1>У прокаті:</h1>
+    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+        {% for movie in movies %}
+        <div style="border: 1px solid #ccc; padding: 10px; width: 200px;">
+            {% if movie.poster %}
+            <img src="{{ movie.poster.url }}" alt="{{ movie.title }}" style="width: 100%;">
+            {% else %}
+            <p><i>Немає постера</i></p>
+            {% endif %}
+
+            <h3><a href="{% url 'movie_detail' movie.id %}">{{ movie.title }}</a></h3>
+            <p><b>Рейтинг:</b> {{ movie.rating }}</p>
+        </div>
+        {% empty %}
+        <p>Наразі фільмів немає.</p>
+        {% endfor %}
+    </div>
+</body>
+
+</html>

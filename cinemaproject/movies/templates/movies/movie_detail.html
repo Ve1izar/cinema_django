@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ movie.title }}</title>
+</head>
+
+<body>
+    <h1>{{ movie.title }}</h1>
+
+    {% if movie.poster %}
+    <img src="{{ movie.poster.url }}" alt="{{ movie.title }}" style="max-width: 300px;">
+    {% endif %}
+
+    <p><b>Режисер / Продюсер:</b> {{ movie.producer }}</p>
+    <p><b>Дата виходу:</b> {{ movie.release_date }}</p>
+    <p><b>Рейтинг:</b> {{ movie.rating }} / 10</p>
+
+    <h3>Опис:</h3>
+    <p>{{ movie.description }}</p>
+
+    <br>
+    <a href="{% url 'movie_list' %}">⬅ Повернутися до списку</a>
+</body>
+
+</html>
