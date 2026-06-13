@@ -1,26 +1,39 @@
-<!DOCTYPE html>
-<html>
+{% extends 'movies/layout.html' %}
 
-<head>
-    <title>{{ movie.title }}</title>
-</head>
+{% block title %}{{ movie.title }}{% endblock %}
 
-<body>
-    <h1>{{ movie.title }}</h1>
+{% block content %}
+<div class="card shadow border-0">
+    <div class="row g-0">
+        <div class="col-md-4">
+            {% if movie.poster %}
+            <img src="{{ movie.poster.url }}" class="img-fluid rounded-start h-100" alt="{{ movie.title }}"
+                style="object-fit: cover; width: 100%;">
+            {% else %}
+            <div
+                class="bg-secondary text-white d-flex align-items-center justify-content-center h-100 p-5 rounded-start">
+                Немає постера
+            </div>
+            {% endif %}
+        </div>
 
-    {% if movie.poster %}
-    <img src="{{ movie.poster.url }}" alt="{{ movie.title }}" style="max-width: 300px;">
-    {% endif %}
+        <div class="col-md-8">
+            <div class="card-body p-5">
+                <h1 class="card-title fw-bold mb-4">{{ movie.title }}</h1>
 
-    <p><b>Режисер / Продюсер:</b> {{ movie.producer }}</p>
-    <p><b>Дата виходу:</b> {{ movie.release_date }}</p>
-    <p><b>Рейтинг:</b> {{ movie.rating }} / 10</p>
+                <ul class="list-group list-group-flush mb-4">
+                    <li class="list-group-item px-0"><strong>Режисер / Продюсер:</strong> {{ movie.producer }}</li>
+                    <li class="list-group-item px-0"><strong>Дата виходу:</strong> {{ movie.release_date }}</li>
+                    <li class="list-group-item px-0"><strong>Рейтинг:</strong> <span
+                            class="badge bg-warning text-dark fs-6">{{ movie.rating }} / 10</span></li>
+                </ul>
 
-    <h3>Опис:</h3>
-    <p>{{ movie.description }}</p>
+                <h4 class="mb-3">Опис:</h4>
+                <p class="card-text text-secondary lh-lg">{{ movie.description }}</p>
 
-    <br>
-    <a href="{% url 'movie_list' %}">⬅ Повернутися до списку</a>
-</body>
-
-</html>
+                <a href="{% url 'movie_list' %}" class="btn btn-outline-dark mt-4">⬅ Повернутися до списку</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
