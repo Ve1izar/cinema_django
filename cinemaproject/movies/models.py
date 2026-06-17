@@ -8,6 +8,7 @@ class Movie(models.Model):
     release_date = models.DateField()
     rating = models.FloatField()
     poster = models.ImageField(upload_to='posters/')
+    is_watched = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

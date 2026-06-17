@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Movie
 
 # Список всіх елементів
@@ -10,3 +10,17 @@ def movie_list(request):
 def movie_detail(request, movie_id):
     movie = get_object_or_404(Movie, id=movie_id) 
     return render(request, 'movies/movie_detail.html', {'movie': movie})
+
+# Історія переглядів
+def movie_history(request):
+    watched_movies = Movie.objects.filter(is_watched=True)
+    return render(request, 'movies/movie_history.html', {'movies': watched_movies})
+
+# Перемикання статусу
+def toggle_watched(request, movie_id):
+    movie = get_object_or_404(Movie, id=movie_id)
+    
+    movie.is_watched = not movie.is_watched
+    movie.save()
+    
+    return redirect('movie_detail', movie_id=movie.id)

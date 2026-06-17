@@ -30,6 +30,15 @@
 
                 <h4 class="mb-3">Опис:</h4>
                 <p class="card-text text-secondary lh-lg">{{ movie.description }}</p>
+                <form action="{% url 'toggle_watched' movie.id %}" method="POST" class="d-inline">
+                    {% csrf_token %}
+                    {% if movie.is_watched %}
+                    <button type="submit" class="btn btn-success mt-4">✅ Вже переглянуто (Видалити з історії)</button>
+                    {% else %}
+                    <button type="submit" class="btn btn-outline-success mt-4">➕ Відмітити як переглянутий</button>
+                    {% endif %}
+                </form>
+                <br><br>
 
                 <a href="{% url 'movie_list' %}" class="btn btn-outline-dark mt-4">⬅ Повернутися до списку</a>
             </div>

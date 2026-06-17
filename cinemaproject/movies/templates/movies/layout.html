@@ -11,9 +11,20 @@
 
 <body class="bg-light">
 
-    <nav class="navbar navbar-dark bg-dark mb-4 shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
         <div class="container">
             <a class="navbar-brand fs-3 fw-bold" href="{% url 'movie_list' %}">🎬 CinemaProject</a>
+    
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fs-5">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'movie_list' %}">Афіша</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-warning" href="{% url 'movie_history' %}">Історія переглядів</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
