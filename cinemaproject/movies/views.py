@@ -24,3 +24,16 @@ def toggle_watched(request, movie_id):
     movie.save()
     
     return redirect('movie_detail', movie_id=movie.id)
+
+# Адмін-панель
+def custom_admin_panel(request):
+    movies = Movie.objects.all()
+    return render(request, 'movies/admin_panel.html', {'movies': movies})
+
+# Видалення фільму
+def delete_movie(request, movie_id):
+    if request.method == 'POST':
+        movie = get_object_or_404(Movie, id=movie_id)
+        movie.delete()
+        
+    return redirect('custom_admin_panel')
