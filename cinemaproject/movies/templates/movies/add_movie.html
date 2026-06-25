@@ -1,0 +1,26 @@
+{% extends 'movies/layout.html' %}
+
+{% block title %}Додати фільм{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-5">
+                <h2 class="fw-bold mb-4">Додати новий фільм</h2>
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {{ form.as_p }}
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{% url 'custom_admin_panel' %}" class="btn btn-outline-secondary">Скасувати</a>
+                        <button type="submit" class="btn btn-success">➕ Зберегти фільм</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

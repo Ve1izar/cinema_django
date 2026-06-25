@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Movie
+from .forms import MovieForm
 
 # Список всіх елементів
 def movie_list(request):
@@ -37,3 +38,16 @@ def delete_movie(request, movie_id):
         movie.delete()
         
     return redirect('custom_admin_panel')
+
+# Додавання нового фільму
+def add_movie(request):
+    if request.method == 'POST':
+        form = MovieForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            form.save()
+            return redirect('custom_admin_panel')
+    else:
+        form = MovieForm()
+
+    return render(request, 'movies/add_movie.html', {'form': form})
