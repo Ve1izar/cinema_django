@@ -51,3 +51,18 @@ def add_movie(request):
         form = MovieForm()
 
     return render(request, 'movies/add_movie.html', {'form': form})
+
+# Редагування фільму
+def edit_movie(request, movie_id):
+    movie = get_object_or_404(Movie, id=movie_id)
+
+    if request.method == 'POST':
+        form = MovieForm(request.POST, request.FILES, instance=movie)
+
+        if form.is_valid():
+            form.save()
+            return redirect('custom_admin_panel')
+    else:
+        form = MovieForm(instance=movie)
+
+    return render(request, 'movies/edit_movie.html', {'form': form})

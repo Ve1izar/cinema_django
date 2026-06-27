@@ -9,4 +9,5 @@ urlpatterns = [
     path('manage/', views.custom_admin_panel, name='custom_admin_panel'),
     path('<int:movie_id>/delete/', views.delete_movie, name='delete_movie'),
     path('manage/add/', views.add_movie, name='add_movie'),
+    path('<int:movie_id>/edit/', views.edit_movie, name='edit_movie'),
 ]
