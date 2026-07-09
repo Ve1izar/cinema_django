@@ -1,11 +1,26 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+
 from .models import Movie
 from .forms import MovieForm
 
 # Список всіх елементів
 def movie_list(request):
-    movies = Movie.objects.all()
-    return render(request, 'movies/movie_list.html', {'movies': movies})
+    sort_by = request.GET.get('sort', '-rating')
+    
+    allowed_sorts = ['rating', '-rating', 'title', '-release_date']
+    if sort_by not in allowed_sorts:
+        sort_by = '-rating'
+        
+    movies = Movie.objects.all().order_by(sort_by)
+    
+    featured_movies = Movie.objects.all().order_by('-rating')[:3]
+    
+    return render(request, 'movies/movie_list.html', {
+        'movies': movies, 
+        'featured_movies': featured_movies,
+        'current_sort': sort_by
+    })
 
 # Детальна інформація
 def movie_detail(request, movie_id):
@@ -24,6 +39,7 @@ def toggle_watched(request, movie_id):
     movie.is_watched = not movie.is_watched
     movie.save()
     
+    messages.success(request, f'🔘 Статус фільму "{movie.title}" змінено!')
     return redirect('movie_detail', movie_id=movie.id)
 
 # Адмін-панель
@@ -35,7 +51,9 @@ def custom_admin_panel(request):
 def delete_movie(request, movie_id):
     if request.method == 'POST':
         movie = get_object_or_404(Movie, id=movie_id)
+        movie_title = movie.title
         movie.delete()
+        messages.error(request, f'🗑 Фільм "{movie_title}" було назавжди видалено!')
         
     return redirect('custom_admin_panel')
 
@@ -46,6 +64,7 @@ def add_movie(request):
 
         if form.is_valid():
             form.save()
+            messages.success(request, '✅ Новий фільм успішно додано до афіші!')
             return redirect('custom_admin_panel')
     else:
         form = MovieForm()
@@ -61,6 +80,7 @@ def edit_movie(request, movie_id):
 
         if form.is_valid():
             form.save()
+            messages.success(request, f'✏️ Зміни для фільму "{movie.title}" збережено!')
             return redirect('custom_admin_panel')
     else:
         form = MovieForm(instance=movie)

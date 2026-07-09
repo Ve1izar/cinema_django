@@ -10,10 +10,8 @@
             <img src="{{ movie.poster.url }}" class="img-fluid rounded-start h-100" alt="{{ movie.title }}"
                 style="object-fit: cover; width: 100%;">
             {% else %}
-            <div
-                class="bg-secondary text-white d-flex align-items-center justify-content-center h-100 p-5 rounded-start">
-                Немає постера
-            </div>
+            <img src="/media/posters/no-image.jpeg" class="card-img-top" alt="Зображення відсутнє"
+                style="height: 400px; object-fit: cover;">
             {% endif %}
         </div>
 

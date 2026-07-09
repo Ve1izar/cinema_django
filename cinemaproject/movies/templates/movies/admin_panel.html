@@ -30,7 +30,8 @@
                         <img src="{{ movie.poster.url }}" alt="poster"
                             style="width: 50px; height: 70px; object-fit: cover; border-radius: 4px;">
                         {% else %}
-                        <span class="badge bg-secondary">Немає</span>
+                        <img src="/media/posters/no-image.jpeg" class="card-img-top" alt="Зображення відсутнє"
+                            style="width: 50px; height: 70px; object-fit: cover; border-radius: 4px;">
                         {% endif %}
                     </td>
                     <td class="fw-bold">{{ movie.title }}</td>
@@ -56,4 +57,38 @@
         </table>
     </div>
 </div>
+
+
+{% if messages %}
+<div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3" style="z-index: 1100;">
+    {% for msg in messages %}
+    <!-- Використовуємо вашу логіку: якщо msg.tags == 'error', буде bg-danger, інакше bg-success -->
+    <div class="toast align-items-center text-bg-{% if msg.tags == 'error' %}danger{% else %}success{% endif %} border-0 shadow-lg mb-2"
+        role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body fs-6 fw-500">
+                {{ msg }}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Скрипт для автоматичного запуску всіх тостів -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toastElList = document.querySelectorAll('.toast');
+
+        toastElList.forEach(function (toastEl) {
+            const toast = bootstrap.Toast.getOrCreateInstance(toastEl, {
+                delay: 4000
+            });
+            toast.show();
+        });
+    });
+</script>
+{% endif %}
+
 {% endblock %}
