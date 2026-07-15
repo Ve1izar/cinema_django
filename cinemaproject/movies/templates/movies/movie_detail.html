@@ -25,9 +25,29 @@
                     <li class="list-group-item px-0"><strong>Рейтинг:</strong> <span
                             class="badge bg-warning text-dark fs-6">{{ movie.rating }} / 10</span></li>
                 </ul>
+                
+                {% if movie.actors %}
+                <p class="mb-2">
+                    <span class="fw-bold">У головних ролях:</span> {{ movie.actors }}
+                </p>
+                {% endif %}
 
                 <h4 class="mb-3">Опис:</h4>
                 <p class="card-text text-secondary lh-lg">{{ movie.description }}</p>
+                
+                {% if movie.trailer_url %}
+                <div class="mt-5 mb-4">
+                    <h4 class="fw-bold mb-3">🎬 Офіційний трейлер</h4>
+                
+                    <div class="ratio ratio-16x9 shadow-lg rounded overflow-hidden">
+                        <iframe src="{{ movie.get_embed_trailer_url }}" title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+                {% endif %}
+
                 <form action="{% url 'toggle_watched' movie.id %}" method="POST" class="d-inline">
                     {% csrf_token %}
                     {% if movie.is_watched %}
@@ -39,6 +59,9 @@
                 <br><br>
 
                 <a href="{% url 'movie_list' %}" class="btn btn-outline-dark mt-4">⬅ Повернутися до списку</a>
+                <a href="{% url 'add_to_watchlist' movie.id %}" class="btn btn-outline-dark mt-4 ms-2">
+                    📌 Буду дивитися
+                </a>
             </div>
         </div>
     </div>

@@ -37,6 +37,9 @@
                 <p class="card-text text-muted mb-3">Рейтинг: <span class="badge bg-warning text-dark">{{ movie.rating }} / 10</span>
                 </p>
 
+                <a href="{% url 'add_to_watchlist' movie.id %}" class="btn btn-outline-primary btn-sm mt-auto mb-2">
+                    📌 Буду дивитися
+                </a>
                 <a href="{% url 'movie_detail' movie.id %}" class="btn btn-primary mt-auto">Детальніше</a>
             </div>
         </div>

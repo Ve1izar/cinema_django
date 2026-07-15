@@ -10,4 +10,7 @@ urlpatterns = [
     path('<int:movie_id>/delete/', views.delete_movie, name='delete_movie'),
     path('manage/add/', views.add_movie, name='add_movie'),
     path('<int:movie_id>/edit/', views.edit_movie, name='edit_movie'),
+    path('watchlist/', views.watchlist_view, name='watchlist_view'),
+    path('watchlist/add/<int:movie_id>/', views.add_to_watchlist, name='add_to_watchlist'),
+    path('watchlist/remove/<int:movie_id>/', views.remove_from_watchlist, name='remove_from_watchlist'),
 ]

@@ -1,0 +1,35 @@
+{% extends 'movies/layout.html' %}
+
+{% block title %}Заплановано до перегляду{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1 class="fw-bold">Заплановані фільми</h1>
+    <p class="text-muted">Фільми, які ви відклали на майбутнє.</p>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for movie in movies %}
+    <div class="col">
+        <div class="card h-100 shadow-sm interactive-card">
+            <img src="{% if movie.poster %}{{ movie.poster.url }}{% else %}/media/posters/no-image.jpg{% endif %}"
+                class="card-img-top" alt="{{ movie.title }}" style="height: 400px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title fw-bold">{{ movie.title }}</h5>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <a href="{% url 'movie_detail' movie.id %}" class="btn btn-primary btn-sm">Деталі</a>
+                    <!-- Кнопка видалення зі списку -->
+                    <a href="{% url 'remove_from_watchlist' movie.id %}" class="btn btn-outline-danger btn-sm">❌
+                        Прибрати</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+        <h4 class="text-muted">Ваш список наразі порожній.</h4>
+        <a href="{% url 'movie_list' %}" class="btn btn-primary mt-3">Перейти до афіші</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

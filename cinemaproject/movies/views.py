@@ -4,6 +4,10 @@ from django.contrib import messages
 from .models import Movie
 from .forms import MovieForm
 
+from imdb import Cinemagoer
+
+WATCHLIST_SESSION_ID = 'watchlist'
+
 # Список всіх елементів
 def movie_list(request):
     sort_by = request.GET.get('sort', '-rating')
@@ -61,10 +65,9 @@ def delete_movie(request, movie_id):
 def add_movie(request):
     if request.method == 'POST':
         form = MovieForm(request.POST, request.FILES)
-
         if form.is_valid():
-            form.save()
-            messages.success(request, '✅ Новий фільм успішно додано до афіші!')
+            form.save() # Просто зберігаємо форму в базу!
+            messages.success(request, '🎬 Новий фільм успішно додано!')
             return redirect('custom_admin_panel')
     else:
         form = MovieForm()
@@ -75,14 +78,51 @@ def add_movie(request):
 def edit_movie(request, movie_id):
     movie = get_object_or_404(Movie, id=movie_id)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = MovieForm(request.POST, request.FILES, instance=movie)
-
         if form.is_valid():
-            form.save()
+            form.save() # Просто зберігаємо оновлену форму!
             messages.success(request, f'✏️ Зміни для фільму "{movie.title}" збережено!')
-            return redirect('custom_admin_panel')
+            return redirect("custom_admin_panel")
     else:
         form = MovieForm(instance=movie)
 
-    return render(request, 'movies/edit_movie.html', {'form': form})
+    return render(
+        request, "movies/edit_movie.html", {"form": form, "movie": movie}
+    )
+
+# Перегляд списку запланованих фільмів
+def watchlist_view(request):
+    # Отримуємо список ID фільмів з сесії (якщо порожньо - повертаємо порожній список [])
+    watchlist_ids = request.session.get(WATCHLIST_SESSION_ID, [])
+    
+    # Дістаємо з бази даних лише ті фільми, ID яких є у нашому списку
+    movies = Movie.objects.filter(id__in=watchlist_ids)
+    
+    return render(request, 'movies/watchlist.html', {'movies': movies})
+
+# Додавання фільму до списку
+def add_to_watchlist(request, movie_id):
+    watchlist = request.session.get(WATCHLIST_SESSION_ID, [])
+    
+    if movie_id not in watchlist:
+        watchlist.append(movie_id)
+        # Обов'язково перезаписуємо сесію, щоб Django зберіг зміни
+        request.session[WATCHLIST_SESSION_ID] = watchlist
+        messages.success(request, '🍿 Фільм додано до списку "Буду дивитися"!')
+    else:
+        messages.info(request, 'Цей фільм вже є у вашому списку.')
+        
+    # Повертаємо користувача на ту сторінку, з якої він натиснув кнопку
+    return redirect(request.META.get('HTTP_REFERER', 'movie_list'))
+
+# Видалення фільму зі списку
+def remove_from_watchlist(request, movie_id):
+    watchlist = request.session.get(WATCHLIST_SESSION_ID, [])
+    
+    if movie_id in watchlist:
+        watchlist.remove(movie_id)
+        request.session[WATCHLIST_SESSION_ID] = watchlist
+        messages.error(request, '🗑 Фільм видалено зі списку запланованих.')
+        
+    return redirect(request.META.get('HTTP_REFERER', 'watchlist_view'))
